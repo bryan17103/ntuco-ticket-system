@@ -246,7 +246,7 @@ async function search() {
     button.disabled = true;
 
     if (!keyword) {
-        resultDiv.innerHTML = "<p style='color:#C86A2A;'>請輸入取票人姓名或手機號碼</p>";
+        resultDiv.innerHTML = "<p style='color:#C86A2A;'>請輸入您的姓名以查詢</p>";
         button.disabled = false;
         searching = false;
         return;
@@ -316,7 +316,10 @@ async function search() {
             請備好零錢，並告知前台人員您的編號，謝謝！
         </div>
         `;
-    
+
+        if (data.updated_time) {
+            timeDiv.innerHTML = `資料更新時間：${data.updated_time}`;}
+        
     } catch (err) {
         resultDiv.innerHTML = "<p style='color:#C86A2A;'>資料載入失敗，請稍後再試</p>";
     }
