@@ -2,6 +2,11 @@ import os
 import json
 from datetime import datetime
 
+from flask import Flask, request, jsonify, send_from_directory
+from google.oauth2 import service_account
+from googleapiclient.discovery import build
+
+
 # 建立 Flask app（你原本少了這行）
 app = Flask(__name__, static_folder="static")
 
