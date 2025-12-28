@@ -1,7 +1,5 @@
 import os
-from flask import Flask, request, jsonify, send_from_directory
-from google.oauth2 import service_account
-from googleapiclient.discovery import build
+import json
 from datetime import datetime
 
 # 建立 Flask app（你原本少了這行）
@@ -21,10 +19,19 @@ SERVICE_ACCOUNT_FILE = os.path.join(
 )
 
 SCOPES = ["https://www.googleapis.com/auth/spreadsheets.readonly"]
+# Google Sheets credentials（Render / local 雙模式）
+if os.environ.get("GOOGLE_SERVICE_ACCOUNT_JSON"):
+    service_account_info = json.loads(
+        os.environ["GOOGLE_SERVICE_ACCOUNT_JSON"]
+    )
+    credentials = service_account.Credentials.from_service_account_info(
+        service_account_info, scopes=SCOPES
+    )
+else:
+    credentials = service_account.Credentials.from_service_account_file(
+        SERVICE_ACCOUNT_FILE, scopes=SCOPES
+    )
 
-credentials = service_account.Credentials.from_service_account_file(
-    SERVICE_ACCOUNT_FILE, scopes=SCOPES
-)
 
 service = build("sheets", "v4", credentials=credentials)
 sheet = service.spreadsheets()
