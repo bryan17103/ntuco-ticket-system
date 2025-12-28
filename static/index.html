@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>NTUCO 2026 寄票查詢系統</title>
+
+<style>
+/* ===== 全域設定 ===== */
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+    background-color: #f7eed7; /* 不動 */
+    color: #a3735b;            /* 不動 */
+    margin: 0;
+    padding: 24px;
+}
+
+.container {
+    max-width: 900px;
+    margin: auto;
+}
+
+/* ===== 標題（置中，不動顏色） ===== */
+h1, h2 {
+    text-align: center;
+}
+
+h1 {
+    font-size: 26px;
+    margin-bottom: 6px;
+    color: #301c14; /* 不動 */
+}
+
+h2 {
+    font-size: 20px;
+    color: #C1442E; /* 不動 */
+    margin-top: 0;
+}
+
+/* ===== 搜尋區 ===== */
+.search-box {
+    margin: 24px auto 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+}
+
+input {
+    flex: 1;
+    min-width: 220px;
+    max-width: 320px;
+    padding: 12px;
+    font-size: 16px;
+    border-radius: 8px;
+    border: 1px solid #d6b7a8;
+    background: #efe1d2;      /* 米沙延伸 */
+    color: #301c14;
+}
+
+input::placeholder {
+    color: #b08a76;
+}
+
+button {
+    padding: 12px 20px;
+    font-size: 16px;
+    border-radius: 8px;
+    border: none;
+    background-color: #C1442E; /* 直接用 h2 主紅 */
+    color: #f7eed7;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #9f3323; /* h2 的暗階 */
+}
+
+/* ===== 結果區 ===== */
+#result {
+    margin-top: 30px;
+}
+
+/* ===== 桌機表格 ===== */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fdf7f1;       /* 比 body 稍亮 */
+    color: #301c14;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+th {
+    background-color: #e4c7bb; /* 低彩度紅灰 */
+    color: #301c14;
+    padding: 12px;
+    font-weight: bold;
+}
+
+td {
+    padding: 12px;
+    border-bottom: 1px solid #e6d2c8;
+    text-align: center;
+}
+
+td.number {
+    background: #ecd1c6;       /* 編號強調但不跳色 */
+    font-weight: bold;
+}
+
+/* ===== 手機卡片 ===== */
+.ticket-card {
+    background: #fdf7f1;
+    color: #301c14;
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 14px;
+    border: 1px solid #e6d2c8;
+}
+
+.ticket-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 6px;
+}
+
+.label {
+    font-weight: bold;
+    color: #a3735b;            /* 承接 body 文字色 */
+}
+
+/* ===== 狀態色 ===== */
+.status-unpicked {
+    color: #C1442E;            /* 與 h2 完全一致 */
+    font-weight: bold;
+}
+
+.status-picked {
+    color: #7d5a4f;            /* 去彩紅棕，穩定不搶 */
+    font-weight: bold;
+}
+
+/* ===== 備註 ===== */
+.pickup-note {
+    margin-top: 16px;
+    color: #C1442E;
+    font-weight: bold;
+    text-align: center;
+}
+
+.updated-time {
+    margin-top: 12px;
+    font-size: 14px;
+    color: #b08a76;
+    text-align: center;
+}
+
+footer {
+    margin-top: 40px;
+    text-align: center;
+    font-size: 14px;
+    color: #b08a76;
+}
+
+/* ===== RWD ===== */
+@media (max-width: 700px) {
+    table {
+        display: none;
+    }
+}
+
+
+</style>
+</head>
+
+<body>
+<div class="container">
+    <h1>台大薰風國樂團 2026 冬季公演</h1>
+    <h2>「歲月·歲樂」寄票查詢系統</h2>
+
+    <div class="search-box">
+        <input id="searchInput" placeholder="輸入姓名或手機號碼"/>
+        <button onclick="search()">查詢</button>
+    </div>
+
+    <div id="result"></div>
+    <div id="updatedTime" class="updated-time"></div>
+
+    <footer>系統製作：王瑋仁</footer>
+</div>
+
+<script>
+async function search() {
+    const keyword = document.getElementById("searchInput").value.trim();
+    const resultDiv = document.getElementById("result");
+    const timeDiv = document.getElementById("updatedTime");
+
+    if (!keyword) {
+        resultDiv.innerHTML = "<p style='color:#C86A2A;'>請輸入姓名或手機號碼</p>";
+        return;
+    }
+
+    resultDiv.innerHTML = "查詢中...";
+    timeDiv.innerHTML = "";
+
+    try {
+        const response = await fetch(`/api/search?q=${encodeURIComponent(keyword)}`);
+        const data = await response.json();
+
+        if (!response.ok) {
+            resultDiv.innerHTML = `<p style='color:#C86A2A;'>${data.error}</p>`;
+            return;
+        }
+
+        const results = data.results;
+        let tableRows = "";
+        let cards = "";
+
+        results.forEach(item => {
+            const statusClass = item.pickup_status.includes("尚未")
+                ? "status-unpicked"
+                : "status-picked";
+
+            // 桌機表格
+            tableRows += `
+            <tr>
+                <td class="${statusClass}">${item.pickup_status}</td>
+                <td class="number">${item.number}</td>
+                <td>${item.name}</td>
+                <td>${item.tickets}</td>
+                <td>${item.pay_status}</td>
+            </tr>`;
+
+            // 手機卡片
+            cards += `
+            <div class="ticket-card">
+                <div class="ticket-row"><span class="label">狀態</span><span class="${statusClass}">${item.pickup_status}</span></div>
+                <div class="ticket-row"><span class="label">編號</span><span>${item.number}</span></div>
+                <div class="ticket-row"><span class="label">姓名</span><span>${item.name}</span></div>
+                <div class="ticket-row"><span class="label">張數</span><span>${item.tickets}</span></div>
+                <div class="ticket-row"><span class="label">付款</span><span>${item.pay_status}</span></div>
+            </div>`;
+        });
+
+        resultDiv.innerHTML = `
+        <table>
+            <tr>
+                <th>取票狀態</th>
+                <th>編號</th>
+                <th>姓名</th>
+                <th>張數</th>
+                <th>付款</th>
+            </tr>
+            ${tableRows}
+        </table>
+        ${cards}
+        <div class="pickup-note">
+            請備好領錢（若需要），並告知前台人員您的編號
+        </div>`;
+
+        if (data.updated_time) {
+            timeDiv.textContent = `資料更新時間：${data.updated_time}`;
+        } else {
+            timeDiv.textContent = "";
+        }
+
+    } catch (err) {
+        resultDiv.innerHTML = "<p style='color:#C86A2A;'>資料載入失敗，請稍後再試</p>";
+    }
+}
+</script>
+</body>
+</html>
