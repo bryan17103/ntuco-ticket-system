@@ -94,7 +94,7 @@ def api_search():
             "pickup_status": pickup_status,
             "pay_status": pay_status,
             "number": number,
-            "name": sender_name,
+            "name": name,
             "tickets": tickets,
             "color": color
         }
