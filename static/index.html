@@ -244,27 +244,28 @@ async function search() {
         });
 
         resultDiv.innerHTML = `
-        <table>
-            <tr>
-                <th>取票狀態</th>
-                <th>編號</th>
-                <th>姓名</th>
-                <th>張數</th>
-                <th>付款</th>
-            </tr>
-            ${tableRows}
-        </table>
-        ${cards}
+        <div class="desktop-only">
+            <table>
+                <tr>
+                    <th>取票狀態</th>
+                    <th>編號</th>
+                    <th>姓名</th>
+                    <th>張數</th>
+                    <th>付款</th>
+                </tr>
+                ${tableRows}
+            </table>
+        </div>
+        
+        <div class="mobile-only">
+            ${cards}
+        </div>
+        
         <div class="pickup-note">
             請備好領錢（若需要），並告知前台人員您的編號
-        </div>`;
-
-        if (data.updated_time) {
-            timeDiv.textContent = `資料更新時間：${data.updated_time}`;
-        } else {
-            timeDiv.textContent = "";
-        }
-
+        </div>
+        `;
+    
     } catch (err) {
         resultDiv.innerHTML = "<p style='color:#C86A2A;'>資料載入失敗，請稍後再試</p>";
     }
