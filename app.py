@@ -43,6 +43,10 @@ sheet = service.spreadsheets()
 
 @app.route("/api/search")
 def api_search():
+    # 台灣時間 GMT+8
+    taipei_tz = timezone(timedelta(hours=8))
+    updated_time = datetime.now(taipei_tz).strftime("%Y-%m-%d %H:%M")
+
     keyword = request.args.get("q", "").strip()
     if not keyword:
         return jsonify({"error": "請輸入查詢關鍵字"}), 400
@@ -110,8 +114,9 @@ def api_search():
         return jsonify({"error": "查無資料，請確認輸入是否正確，或至前台確認。"}), 404
 
     return jsonify({
-    "results": results,
-    "updated_time": datetime.now().strftime("%Y-%m-%d %H:%M")
+        "results": results,
+        "updated_time": updated_time
+})
 })
 
 
