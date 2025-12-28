@@ -6,11 +6,11 @@
 <title>NTUCO 2026 寄票查詢系統</title>
 
 <style>
-/* ===== 全域設定 ===== */
+
 body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
-    background-color: #f7eed7; /* 不動 */
-    color: #a3735b;            /* 不動 */
+    background-color: #f7eed7; 
+    color: #a3735b;            
     margin: 0;
     padding: 24px;
 }
@@ -20,7 +20,6 @@ body {
     margin: auto;
 }
 
-/* ===== 標題（置中，不動顏色） ===== */
 h1, h2 {
     text-align: center;
 }
@@ -28,16 +27,15 @@ h1, h2 {
 h1 {
     font-size: 24px;
     margin-bottom: 6px;
-    color: #301c14; /* 不動 */
+    color: #301c14; 
 }
 
 h2 {
     font-size: 20px;
-    color: #C1442E; /* 不動 */
+    color: #C1442E; 
     margin-top: 0;
 }
 
-/* ===== 搜尋區 ===== */
 .search-box {
     margin: 24px auto 0;
     display: flex;
@@ -54,7 +52,7 @@ input {
     font-size: 16px;
     border-radius: 8px;
     border: 1px solid #d6b7a8;
-    background: #efe1d2;      /* 米沙延伸 */
+    background: #efe1d2;     
     color: #301c14;
 }
 
@@ -67,32 +65,31 @@ button {
     font-size: 16px;
     border-radius: 8px;
     border: none;
-    background-color: #C1442E; /* 直接用 h2 主紅 */
+    background-color: #C1442E; 
     color: #f7eed7;
     cursor: pointer;
 }
 
 button:hover {
-    background-color: #9f3323; /* h2 的暗階 */
+    background-color: #9f3323;
 }
 
-/* ===== 結果區 ===== */
 #result {
     margin-top: 30px;
 }
 
-/* ===== 桌機表格 ===== */
+/* Desktop */
 table {
     width: 100%;
     border-collapse: collapse;
-    background: #fdf7f1;       /* 比 body 稍亮 */
+    background: #fdf7f1;      
     color: #301c14;
     border-radius: 10px;
     overflow: hidden;
 }
 
 th {
-    background-color: #e4c7bb; /* 低彩度紅灰 */
+    background-color: #e4c7bb; 
     color: #301c14;
     padding: 12px;
     font-weight: bold;
@@ -105,7 +102,7 @@ td {
 }
 
 td.number {
-    background: #ecd1c6;       /* 編號強調但不跳色 */
+    background: #ecd1c6;       
     font-weight: bold;
 }
 
@@ -127,21 +124,20 @@ td.number {
 
 .label {
     font-weight: bold;
-    color: #a3735b;            /* 承接 body 文字色 */
+    color: #a3735b;            
 }
 
 /* ===== 狀態色 ===== */
 .status-unpicked {
-    color: #C1442E;            /* 與 h2 完全一致 */
+    color: #C1442E;           
     font-weight: bold;
 }
 
 .status-picked {
-    color: #7d5a4f;            /* 去彩紅棕，穩定不搶 */
+    color: #7d5a4f;            
     font-weight: bold;
 }
 
-/* ===== 備註 ===== */
 .pickup-note {
     margin-top: 16px;
     color: #C1442E;
@@ -163,14 +159,12 @@ footer {
     color: #b08a76;
 }
 
-/* ===== RWD ===== */
 @media (max-width: 700px) {
     table {
         display: none;
     }
 }
 
-/* ===== 裝置顯示控制 ===== */
 .desktop-only {
     display: block;
 }
@@ -189,21 +183,21 @@ footer {
     }
 }
 
-    /* ===== 編號強調（桌機表格） ===== */
+/* ===== Desktop ===== */
 td.number {
-    background-color: #C1442E;   /* 主暖紅 */
-    color: #f7eed7;              /* 米白 */
+    background-color: #C1442E;   
+    color: #f7eed7;             
     font-weight: 700;
     font-size: 18px;
     letter-spacing: 1px;
 }
 
-/* ===== 編號強調（手機卡片） ===== */
+/* ===== Phone ===== */
 .ticket-number {
     background-color: #C1442E;
     color: #f7eed7;
     padding: 4px 12px;
-    border-radius: 999px;        /* 膠囊形 */
+    border-radius: 999px;        
     font-weight: 700;
     font-size: 16px;
     letter-spacing: 1px;
@@ -230,32 +224,28 @@ td.number {
 </div>
 
 <script>
-async function search() {
-    const keyword = document.getElementById("searchInput").value.trim();
-    const resultDiv = document.getElementById("result");
-    const timeDiv = document.getElementById("updatedTime");
+let searching = false;
 
+async function search() {
     if (searching) return;
     searching = true;
 
     const keyword = document.getElementById("searchInput").value.trim();
     const resultDiv = document.getElementById("result");
     const timeDiv = document.getElementById("updatedTime");
-    const button = document.querySelector("button");
+    const button = document.querySelector(".search-box button");
 
     button.disabled = true;
 
-    if (!keyword) {
-        resultDiv.innerHTML = "<p style='color:#C86A2A;'>請輸入您的姓名以查詢</p>";
-        button.disabled = false;
-        searching = false;
-        return;
-    }
-
-    resultDiv.innerHTML = "查詢中...";
-    timeDiv.innerHTML = "";
-
     try {
+        if (!keyword) {
+            resultDiv.innerHTML = "<p style='color:#C86A2A;'>請輸入您的姓名以查詢</p>";
+            return;
+        }
+
+        resultDiv.innerHTML = "查詢中...";
+        timeDiv.innerHTML = "";
+
         const response = await fetch(`/api/search?q=${encodeURIComponent(keyword)}`);
         const data = await response.json();
 
@@ -273,7 +263,6 @@ async function search() {
                 ? "status-unpicked"
                 : "status-picked";
 
-            // 桌機表格
             tableRows += `
             <tr>
                 <td class="${statusClass}">${item.pickup_status}</td>
@@ -283,7 +272,6 @@ async function search() {
                 <td>${item.pay_status}</td>
             </tr>`;
 
-            // 手機卡片
             cards += `
             <div class="ticket-card">
                 <div class="ticket-row"><span class="label">狀態</span><span class="${statusClass}">${item.pickup_status}</span></div>
@@ -307,21 +295,25 @@ async function search() {
                 ${tableRows}
             </table>
         </div>
-        
+
         <div class="mobile-only">
             ${cards}
         </div>
-        
+
         <div class="pickup-note">
             請備好零錢，並告知前台人員您的編號，謝謝！
         </div>
         `;
 
         if (data.updated_time) {
-            timeDiv.innerHTML = `資料更新時間：${data.updated_time}`;}
-        
+            timeDiv.innerHTML = `資料更新時間：${data.updated_time}`;
+        }
+
     } catch (err) {
         resultDiv.innerHTML = "<p style='color:#C86A2A;'>資料載入失敗，請稍後再試</p>";
+    } finally {
+        searching = false;
+        button.disabled = false;
     }
 }
 </script>
