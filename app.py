@@ -73,7 +73,7 @@ def api_search():
         sender_name = get_val(2)
         tickets = get_val(3)
         number = get_val(4)
-        need_pay = get_val(5).upper() == "Y"
+        need_pay = get_val(5).upper() == "TRUE"
         amount = get_val(6)
         picked_up_flag = get_val(7).upper() == "TRUE"
 
