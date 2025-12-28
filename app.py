@@ -117,8 +117,6 @@ def api_search():
         "results": results,
         "updated_time": updated_time
 })
-})
-
 
 @app.route('/')
 def index():
