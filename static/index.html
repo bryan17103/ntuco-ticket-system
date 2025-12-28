@@ -170,8 +170,29 @@ footer {
     }
 }
 
+/* ===== 裝置顯示控制 ===== */
+.desktop-only {
+    display: block;
+}
+
+.mobile-only {
+    display: none;
+}
+
+@media (max-width: 700px) {
+    .desktop-only {
+        display: none;
+    }
+
+    .mobile-only {
+        display: block;
+    }
+}
 
 </style>
+
+
+
 </head>
 
 <body>
