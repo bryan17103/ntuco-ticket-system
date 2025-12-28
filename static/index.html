@@ -189,9 +189,27 @@ footer {
     }
 }
 
+    /* ===== 編號強調（桌機表格） ===== */
+td.number {
+    background-color: #C1442E;   /* 主暖紅 */
+    color: #f7eed7;              /* 米白 */
+    font-weight: 700;
+    font-size: 18px;
+    letter-spacing: 1px;
+}
+
+/* ===== 編號強調（手機卡片） ===== */
+.ticket-number {
+    background-color: #C1442E;
+    color: #f7eed7;
+    padding: 4px 12px;
+    border-radius: 999px;        /* 膠囊形 */
+    font-weight: 700;
+    font-size: 16px;
+    letter-spacing: 1px;
+}
+
 </style>
-
-
 
 </head>
 
@@ -257,8 +275,8 @@ async function search() {
             cards += `
             <div class="ticket-card">
                 <div class="ticket-row"><span class="label">狀態</span><span class="${statusClass}">${item.pickup_status}</span></div>
-                <div class="ticket-row"><span class="label">編號</span><span>${item.number}</span></div>
-                <div class="ticket-row"><span class="label">姓名</span><span>${item.name}</span></div>
+                <div class="ticket-row"><span class="label">編號</span><span class="ticket-number">${item.number}</span></div>
+                <div class="ticket-row"><span class="label">取票人姓名</span><span>${item.name}</span></div>
                 <div class="ticket-row"><span class="label">張數</span><span>${item.tickets}</span></div>
                 <div class="ticket-row"><span class="label">付款</span><span>${item.pay_status}</span></div>
             </div>`;
@@ -270,7 +288,7 @@ async function search() {
                 <tr>
                     <th>取票狀態</th>
                     <th>編號</th>
-                    <th>姓名</th>
+                    <th>取票人姓名</th>
                     <th>張數</th>
                     <th>付款</th>
                 </tr>
