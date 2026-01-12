@@ -271,24 +271,40 @@ async function search() {
             const statusClass = item.pickup_status.includes("尚未")
                 ? "status-unpicked"
                 : "status-picked";
-
+        
+            const payDisplay = item.pay_status.includes("需要付款")
+                ? item.pay_status.replace(
+                    /(\$\d+)/,
+                    '<span class="capsule">$1</span>'
+                  )
+                : item.pay_status;
+            
             tableRows += `
             <tr>
                 <td>${item.counter}</td>
                 <td><span class="capsule">${item.number}</span></td>
                 <td><span class="capsule">${item.pickup_name}</span></td>
                 <td>${item.tickets}</td>
-                <td>${item.pay_status}</td>
+                <td>
+                    ${
+                        item.pay_status.includes("需要付款")
+                        ? item.pay_status.replace(
+                            /(\$\d+)/,
+                            '<span class="capsule">$1</span>'
+                          )
+                        : item.pay_status
+                    }
+                </td>
                 <td><span class="capsule">${item.sender_name}</span></td>
                 <td class="${statusClass}">${item.pickup_status}</td>
             </tr>
             `;
-
+            
             cards += `
             <div class="ticket-card">
                 <div class="ticket-row">
                     <span class="label">櫃檯</span>
-                    <span>${item.counter}</span>
+                    <span class="capsule">${item.counter}</span>
                 </div>
             
                 <div class="ticket-row">
@@ -308,12 +324,12 @@ async function search() {
             
                 <div class="ticket-row">
                     <span class="label">付款</span>
-                    <span>${item.pay_status}</span>
+                    <span>${payDisplay}</span>
                 </div>
             
                 <div class="ticket-row">
                     <span class="label">寄票人</span>
-                    <span class="capsule">${item.sender_name}</span>
+                    <span>${item.sender_name}</span>
                 </div>
             
                 <div class="ticket-row">
@@ -322,8 +338,6 @@ async function search() {
                 </div>
             </div>
             `;
-
-        });
 
         resultDiv.innerHTML = `
         <div class="desktop-only">
