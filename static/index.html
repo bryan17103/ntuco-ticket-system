@@ -202,6 +202,16 @@ td.number {
     letter-spacing: 1px;
 }
 
+.capsule {
+    background-color: #C1442E;
+    color: #f7eed7;
+    padding: 4px 12px;
+    border-radius: 999px;
+    font-weight: 700;
+    display: inline-block;
+    letter-spacing: 1px;
+}
+
 </style>
 
 </head>
@@ -264,32 +274,68 @@ async function search() {
 
             tableRows += `
             <tr>
-                <td class="${statusClass}">${item.pickup_status}</td>
-                <td class="number">${item.number}</td>
-                <td>${item.name}</td>
+                <td>${item.counter}</td>
+                <td><span class="capsule">${item.number}</span></td>
+                <td><span class="capsule">${item.pickup_name}</span></td>
                 <td>${item.tickets}</td>
                 <td>${item.pay_status}</td>
-            </tr>`;
+                <td><span class="capsule">${item.sender_name}</span></td>
+                <td class="${statusClass}">${item.pickup_status}</td>
+            </tr>
+            `;
 
             cards += `
             <div class="ticket-card">
-                <div class="ticket-row"><span class="label">狀態</span><span class="${statusClass}">${item.pickup_status}</span></div>
-                <div class="ticket-row"><span class="label">編號</span><span class="ticket-number">${item.number}</span></div>
-                <div class="ticket-row"><span class="label">取票人姓名</span><span>${item.name}</span></div>
-                <div class="ticket-row"><span class="label">張數</span><span>${item.tickets}</span></div>
-                <div class="ticket-row"><span class="label">付款</span><span>${item.pay_status}</span></div>
-            </div>`;
+                <div class="ticket-row">
+                    <span class="label">櫃檯</span>
+                    <span>${item.counter}</span>
+                </div>
+            
+                <div class="ticket-row">
+                    <span class="label">編號</span>
+                    <span class="capsule">${item.number}</span>
+                </div>
+            
+                <div class="ticket-row">
+                    <span class="label">取票人</span>
+                    <span class="capsule">${item.pickup_name}</span>
+                </div>
+            
+                <div class="ticket-row">
+                    <span class="label">張數</span>
+                    <span>${item.tickets}</span>
+                </div>
+            
+                <div class="ticket-row">
+                    <span class="label">付款</span>
+                    <span>${item.pay_status}</span>
+                </div>
+            
+                <div class="ticket-row">
+                    <span class="label">寄票人</span>
+                    <span class="capsule">${item.sender_name}</span>
+                </div>
+            
+                <div class="ticket-row">
+                    <span class="label">取票狀態</span>
+                    <span class="${statusClass}">${item.pickup_status}</span>
+                </div>
+            </div>
+            `;
+
         });
 
         resultDiv.innerHTML = `
         <div class="desktop-only">
             <table>
                 <tr>
-                    <th>取票狀態</th>
+                    <th>櫃檯</th>
                     <th>編號</th>
                     <th>取票人姓名</th>
                     <th>張數</th>
-                    <th>付款</th>
+                    <th>付款情況</th>
+                    <th>寄票人姓名</th>
+                    <th>取票狀態</th>
                 </tr>
                 ${tableRows}
             </table>
@@ -300,7 +346,7 @@ async function search() {
         </div>
 
         <div class="pickup-note">
-            請備好零錢，並告知前台人員您的編號，謝謝！
+            請備好整數零錢，並告知前台人員您的編號，謝謝！
         </div>
         `;
 
