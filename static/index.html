@@ -179,7 +179,7 @@ async function search() {
 
     try {
         if (!keyword) {
-            resultDiv.innerHTML = "請輸入姓名";
+            resultDiv.innerHTML = "<p>請輸入姓名</p>";
             return;
         }
 
@@ -190,7 +190,7 @@ async function search() {
         const data = await response.json();
 
         if (!response.ok) {
-            resultDiv.innerHTML = data.error;
+            resultDiv.innerHTML = `<p>${data.error}</p>`;
             return;
         }
 
@@ -202,9 +202,13 @@ async function search() {
                 ? "status-unpicked"
                 : "status-picked";
 
-            const payDisplay = item.pay_status.includes("需要付款")
-                ? item.pay_status.replace(/(\$\d+)/, '<span class="capsule">$1</span>')
-                : item.pay_status;
+            let payDisplay = item.pay_status;
+            if (item.pay_status.includes("需要付款")) {
+                payDisplay = item.pay_status.replace(
+                    /(\$\d+)/,
+                    '<span class="capsule">$1</span>'
+                );
+            }
 
             tableRows += `
             <tr>
@@ -215,7 +219,8 @@ async function search() {
                 <td>${payDisplay}</td>
                 <td>${item.sender_name}</td>
                 <td class="${statusClass}">${item.pickup_status}</td>
-            </tr>`;
+            </tr>
+            `;
 
             cards += `
             <div class="ticket-card">
@@ -226,7 +231,8 @@ async function search() {
                 <div class="ticket-row"><span class="label">付款</span><span>${payDisplay}</span></div>
                 <div class="ticket-row"><span class="label">寄票人</span><span>${item.sender_name}</span></div>
                 <div class="ticket-row"><span class="label">取票狀態</span><span class="${statusClass}">${item.pickup_status}</span></div>
-            </div>`;
+            </div>
+            `;
         });
 
         resultDiv.innerHTML = `
@@ -235,27 +241,31 @@ async function search() {
                 <tr>
                     <th>櫃檯</th>
                     <th>編號</th>
-                    <th>取票人</th>
+                    <th>取票人姓名</th>
                     <th>張數</th>
                     <th>付款情況</th>
-                    <th>寄票人</th>
+                    <th>寄票人姓名</th>
                     <th>取票狀態</th>
                 </tr>
                 ${tableRows}
             </table>
         </div>
-        <div class="mobile-only">${cards}</div>
-        <div class="pickup-note">請備好整數零錢，並告知前台您的編號，謝謝！</div>
+        <div class="mobile-only">
+            ${cards}
+        </div>
+        <div class="pickup-note">請備好整數零錢並告知編號</div>
         `;
 
         timeDiv.innerHTML = `資料更新時間：${data.updated_time}`;
 
     } catch (e) {
-        resultDiv.innerHTML = "系統錯誤，請稍後再試";
+        resultDiv.innerHTML = "<p>系統錯誤，請稍後再試</p>";
+        console.error(e);
     } finally {
         searching = false;
     }
 }
 </script>
+
 </body>
 </html>
