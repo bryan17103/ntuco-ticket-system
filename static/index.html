@@ -6,11 +6,10 @@
 <title>NTUCO 2026 寄票查詢系統</title>
 
 <style>
-
 body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
-    background-color: #f7eed7; 
-    color: #a3735b;            
+    background-color: #f7eed7;
+    color: #a3735b;
     margin: 0;
     padding: 24px;
 }
@@ -27,37 +26,30 @@ h1, h2 {
 h1 {
     font-size: 24px;
     margin-bottom: 6px;
-    color: #301c14; 
+    color: #301c14;
 }
 
 h2 {
     font-size: 20px;
-    color: #C1442E; 
+    color: #C1442E;
     margin-top: 0;
 }
 
 .search-box {
     margin: 24px auto 0;
     display: flex;
-    flex-wrap: wrap;
     gap: 10px;
     justify-content: center;
 }
 
 input {
-    flex: 1;
     min-width: 220px;
-    max-width: 320px;
     padding: 12px;
     font-size: 16px;
     border-radius: 8px;
     border: 1px solid #d6b7a8;
-    background: #efe1d2;     
+    background: #efe1d2;
     color: #301c14;
-}
-
-input::placeholder {
-    color: #b08a76;
 }
 
 button {
@@ -65,7 +57,7 @@ button {
     font-size: 16px;
     border-radius: 8px;
     border: none;
-    background-color: #C1442E; 
+    background-color: #C1442E;
     color: #f7eed7;
     cursor: pointer;
 }
@@ -74,42 +66,26 @@ button:hover {
     background-color: #9f3323;
 }
 
-#result {
-    margin-top: 30px;
-}
-
-/* Desktop */
 table {
     width: 100%;
     border-collapse: collapse;
-    background: #fdf7f1;      
-    color: #301c14;
-    border-radius: 10px;
-    overflow: hidden;
+    background: #fdf7f1;
+    margin-top: 30px;
 }
 
-th {
-    background-color: #e4c7bb; 
-    color: #301c14;
-    padding: 12px;
-    font-weight: bold;
-}
-
-td {
+th, td {
     padding: 12px;
     border-bottom: 1px solid #e6d2c8;
     text-align: center;
 }
 
-td.number {
-    background: #ecd1c6;       
+th {
+    background-color: #e4c7bb;
     font-weight: bold;
 }
 
-/* ===== 手機卡片 ===== */
 .ticket-card {
     background: #fdf7f1;
-    color: #301c14;
     border-radius: 12px;
     padding: 16px;
     margin-bottom: 14px;
@@ -124,17 +100,33 @@ td.number {
 
 .label {
     font-weight: bold;
-    color: #a3735b;            
 }
 
 .status-unpicked {
-    color: #C1442E;           
+    color: #C1442E;
     font-weight: bold;
 }
 
 .status-picked {
-    color: #7d5a4f;            
+    color: #7d5a4f;
     font-weight: bold;
+}
+
+.capsule {
+    background-color: #C1442E;
+    color: #f7eed7;
+    padding: 4px 12px;
+    border-radius: 999px;
+    font-weight: 700;
+    display: inline-block;
+}
+
+.desktop-only { display: block; }
+.mobile-only { display: none; }
+
+@media (max-width: 700px) {
+    .desktop-only { display: none; }
+    .mobile-only { display: block; }
 }
 
 .pickup-note {
@@ -147,7 +139,6 @@ td.number {
 .updated-time {
     margin-top: 12px;
     font-size: 14px;
-    color: #b08a76;
     text-align: center;
 }
 
@@ -155,65 +146,8 @@ footer {
     margin-top: 40px;
     text-align: center;
     font-size: 14px;
-    color: #b08a76;
 }
-
-@media (max-width: 700px) {
-    table {
-        display: none;
-    }
-}
-
-.desktop-only {
-    display: block;
-}
-
-.mobile-only {
-    display: none;
-}
-
-@media (max-width: 700px) {
-    .desktop-only {
-        display: none;
-    }
-
-    .mobile-only {
-        display: block;
-    }
-}
-
-/* ===== Desktop ===== */
-td.number {
-    background-color: #C1442E;   
-    color: #f7eed7;             
-    font-weight: 700;
-    font-size: 18px;
-    letter-spacing: 1px;
-}
-
-/* ===== Phone ===== */
-.ticket-number {
-    background-color: #C1442E;
-    color: #f7eed7;
-    padding: 4px 12px;
-    border-radius: 999px;        
-    font-weight: 700;
-    font-size: 16px;
-    letter-spacing: 1px;
-}
-
-.capsule {
-    background-color: #C1442E;
-    color: #f7eed7;
-    padding: 4px 12px;
-    border-radius: 999px;
-    font-weight: 700;
-    display: inline-block;
-    letter-spacing: 1px;
-}
-
 </style>
-
 </head>
 
 <body>
@@ -222,7 +156,7 @@ td.number {
     <h2>「歲月·歲樂」寄票查詢系統</h2>
 
     <div class="search-box">
-        <input id="searchInput" placeholder="請輸入您的姓名以查詢"/>
+        <input id="searchInput" placeholder="請輸入您的姓名以查詢。"/>
         <button onclick="search()">查詢</button>
     </div>
 
@@ -242,13 +176,10 @@ async function search() {
     const keyword = document.getElementById("searchInput").value.trim();
     const resultDiv = document.getElementById("result");
     const timeDiv = document.getElementById("updatedTime");
-    const button = document.querySelector(".search-box button");
-
-    button.disabled = true;
 
     try {
         if (!keyword) {
-            resultDiv.innerHTML = "<p style='color:#C86A2A;'>請輸入您的姓名以查詢</p>";
+            resultDiv.innerHTML = "請輸入姓名";
             return;
         }
 
@@ -259,85 +190,44 @@ async function search() {
         const data = await response.json();
 
         if (!response.ok) {
-            resultDiv.innerHTML = `<p style='color:#C86A2A;'>${data.error}</p>`;
+            resultDiv.innerHTML = data.error;
             return;
         }
 
-        const results = data.results;
         let tableRows = "";
         let cards = "";
 
-        results.forEach(item => {
+        data.results.forEach(item => {
             const statusClass = item.pickup_status.includes("尚未")
                 ? "status-unpicked"
                 : "status-picked";
-        
+
             const payDisplay = item.pay_status.includes("需要付款")
-                ? item.pay_status.replace(
-                    /(\$\d+)/,
-                    '<span class="capsule">$1</span>'
-                  )
+                ? item.pay_status.replace(/(\$\d+)/, '<span class="capsule">$1</span>')
                 : item.pay_status;
-            
+
             tableRows += `
             <tr>
-                <td>${item.counter}</td>
+                <td><span class="capsule">${item.counter}</span></td>
                 <td><span class="capsule">${item.number}</span></td>
                 <td><span class="capsule">${item.pickup_name}</span></td>
                 <td>${item.tickets}</td>
-                <td>
-                    ${
-                        item.pay_status.includes("需要付款")
-                        ? item.pay_status.replace(
-                            /(\$\d+)/,
-                            '<span class="capsule">$1</span>'
-                          )
-                        : item.pay_status
-                    }
-                </td>
-                <td><span class="capsule">${item.sender_name}</span></td>
+                <td>${payDisplay}</td>
+                <td>${item.sender_name}</td>
                 <td class="${statusClass}">${item.pickup_status}</td>
-            </tr>
-            `;
-            
+            </tr>`;
+
             cards += `
             <div class="ticket-card">
-                <div class="ticket-row">
-                    <span class="label">櫃檯</span>
-                    <span class="capsule">${item.counter}</span>
-                </div>
-            
-                <div class="ticket-row">
-                    <span class="label">編號</span>
-                    <span class="capsule">${item.number}</span>
-                </div>
-            
-                <div class="ticket-row">
-                    <span class="label">取票人</span>
-                    <span class="capsule">${item.pickup_name}</span>
-                </div>
-            
-                <div class="ticket-row">
-                    <span class="label">張數</span>
-                    <span>${item.tickets}</span>
-                </div>
-            
-                <div class="ticket-row">
-                    <span class="label">付款</span>
-                    <span>${payDisplay}</span>
-                </div>
-            
-                <div class="ticket-row">
-                    <span class="label">寄票人</span>
-                    <span>${item.sender_name}</span>
-                </div>
-            
-                <div class="ticket-row">
-                    <span class="label">取票狀態</span>
-                    <span class="${statusClass}">${item.pickup_status}</span>
-                </div>
-            </div>
-            `;
+                <div class="ticket-row"><span class="label">櫃檯</span><span class="capsule">${item.counter}</span></div>
+                <div class="ticket-row"><span class="label">編號</span><span class="capsule">${item.number}</span></div>
+                <div class="ticket-row"><span class="label">取票人</span><span class="capsule">${item.pickup_name}</span></div>
+                <div class="ticket-row"><span class="label">張數</span><span>${item.tickets}</span></div>
+                <div class="ticket-row"><span class="label">付款</span><span>${payDisplay}</span></div>
+                <div class="ticket-row"><span class="label">寄票人</span><span>${item.sender_name}</span></div>
+                <div class="ticket-row"><span class="label">取票狀態</span><span class="${statusClass}">${item.pickup_status}</span></div>
+            </div>`;
+        });
 
         resultDiv.innerHTML = `
         <div class="desktop-only">
@@ -345,34 +235,25 @@ async function search() {
                 <tr>
                     <th>櫃檯</th>
                     <th>編號</th>
-                    <th>取票人姓名</th>
+                    <th>取票人</th>
                     <th>張數</th>
                     <th>付款情況</th>
-                    <th>寄票人姓名</th>
+                    <th>寄票人</th>
                     <th>取票狀態</th>
                 </tr>
                 ${tableRows}
             </table>
         </div>
-
-        <div class="mobile-only">
-            ${cards}
-        </div>
-
-        <div class="pickup-note">
-            請備好整數零錢，並告知前台人員您的編號，謝謝！
-        </div>
+        <div class="mobile-only">${cards}</div>
+        <div class="pickup-note">請備好整數零錢，並告知前台您的編號，謝謝！</div>
         `;
 
-        if (data.updated_time) {
-            timeDiv.innerHTML = `資料更新時間：${data.updated_time}`;
-        }
+        timeDiv.innerHTML = `資料更新時間：${data.updated_time}`;
 
-    } catch (err) {
-        resultDiv.innerHTML = "<p style='color:#C86A2A;'>資料載入失敗，請稍後再試</p>";
+    } catch (e) {
+        resultDiv.innerHTML = "系統錯誤，請稍後再試";
     } finally {
         searching = false;
-        button.disabled = false;
     }
 }
 </script>
