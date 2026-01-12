@@ -67,7 +67,7 @@ def api_search():
         picked_up_flag = get_val(6).upper() == "TRUE"  # G
         counter = get_val(7)       # H
 
-        if not (name == keyword or phone.endswith(keyword)):
+        if pickup_name != keyword:
             continue
 
         if picked_up_flag and need_pay:
