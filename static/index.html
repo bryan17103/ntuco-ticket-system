@@ -214,7 +214,7 @@ async function search() {
             <tr>
                 <td><span class="capsule">${item.counter}</span></td>
                 <td><span class="capsule">${item.number}</span></td>
-                <td><span class="capsule">${item.pickup_name}</span></td>
+                <td>${item.pickup_name}</td>
                 <td>${item.tickets}</td>
                 <td>${payDisplay}</td>
                 <td>${item.sender_name}</td>
@@ -226,7 +226,7 @@ async function search() {
             <div class="ticket-card">
                 <div class="ticket-row"><span class="label">櫃檯</span><span class="capsule">${item.counter}</span></div>
                 <div class="ticket-row"><span class="label">編號</span><span class="capsule">${item.number}</span></div>
-                <div class="ticket-row"><span class="label">取票人</span><span class="capsule">${item.pickup_name}</span></div>
+                <div class="ticket-row"><span class="label">取票人</span><span>${item.pickup_name}</span></div>
                 <div class="ticket-row"><span class="label">張數</span><span>${item.tickets}</span></div>
                 <div class="ticket-row"><span class="label">付款</span><span>${payDisplay}</span></div>
                 <div class="ticket-row"><span class="label">寄票人</span><span>${item.sender_name}</span></div>
@@ -241,10 +241,10 @@ async function search() {
                 <tr>
                     <th>櫃檯</th>
                     <th>編號</th>
-                    <th>取票人姓名</th>
+                    <th>取票人</th>
                     <th>張數</th>
                     <th>付款情況</th>
-                    <th>寄票人姓名</th>
+                    <th>寄票人</th>
                     <th>取票狀態</th>
                 </tr>
                 ${tableRows}
@@ -253,7 +253,7 @@ async function search() {
         <div class="mobile-only">
             ${cards}
         </div>
-        <div class="pickup-note">請備好整數零錢並告知編號</div>
+        <div class="pickup-note">請備好整數零錢，並告知前台您的編號，謝謝！</div>
         `;
 
         timeDiv.innerHTML = `資料更新時間：${data.updated_time}`;
