@@ -121,6 +121,10 @@ th {
     display: inline-block;
 }
 
+#result {
+    margin-top: 24px; /* ⬅️ 拉開搜尋欄與結果 */
+}
+    
 .desktop-only { display: block; }
 .mobile-only { display: none; }
 
@@ -141,6 +145,26 @@ th {
     font-size: 14px;
     text-align: center;
 }
+    
+.help-link {
+    text-align: center;
+    margin-top: 10px;
+    margin-bottom: 18px; 
+}
+
+.help-link a {
+    display: inline-block;
+    padding: 8px 14px;
+    background-color: #C1442E;
+    color: #f7eed7;
+    border-radius: 8px;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.help-link a:hover {
+    background-color: #9f3323;
+}
 
 footer {
     margin-top: 40px;
@@ -155,12 +179,13 @@ footer {
     <h1>台大薰風國樂團 2026 冬季公演</h1>
     <h2>「歲月·歲樂」寄票查詢系統</h2>
     
-    <a href="https://drive.google.com/file/d/1i_rNMs4ZCvzj8KjmxtyH5LNkfmqrBt1q/view?usp=sharing"
-       target="_blank"
-       rel="noopener noreferrer"
-       style="display:inline-block; padding:8px 14px; background:#C1442E; color:#f7eed7; border-radius:6px; font-weight:700; text-decoration:none;">
-       📘 使用說明
-    </a>
+    <div class="help-link">
+        <a href="https://drive.google.com/file/d/1i_rNMs4ZCvzj8KjmxtyH5LNkfmqrBt1q/view?usp=sharing"
+           target="_blank"
+           rel="noopener noreferrer">
+            📘 使用說明
+        </a>
+    </div>
 
     <div class="search-box">
         <input id="searchInput" placeholder="請輸入您的姓名以查詢。"/>
