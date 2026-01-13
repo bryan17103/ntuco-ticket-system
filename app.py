@@ -66,7 +66,6 @@ def api_search():
     for row in rows:
         def get_val(idx):
             return row[idx].strip() if idx < len(row) else ""
-
         
         pickup_name_raw = get_val(0)   # A
         sender_name_raw = get_val(1)   # B
@@ -79,7 +78,7 @@ def api_search():
         picked_up_flag = get_val(6).upper() == "TRUE"  # G
         counter = get_val(7)       # H
 
-        if pickup_name != keyword:
+        if pickup_name_raw != keyword:
             continue
 
         if picked_up_flag and need_pay:
