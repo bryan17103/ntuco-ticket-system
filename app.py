@@ -33,6 +33,15 @@ else:
 service = build("sheets", "v4", credentials=credentials)
 sheet = service.spreadsheets()
 
+def mask_chinese_name(name: str) -> str:
+    name = name.strip()
+    if len(name) <= 1:
+        return name
+    elif len(name) == 2:
+        return name[0] + "O"
+    else:
+        return name[0] + "O" + name[2:]
+
 @app.route("/api/search")
 def api_search():
     taipei_tz = timezone(timedelta(hours=8))
@@ -58,8 +67,11 @@ def api_search():
         def get_val(idx):
             return row[idx].strip() if idx < len(row) else ""
 
-        pickup_name = get_val(0)   # A
-        sender_name = get_val(1)   # B
+        
+        pickup_name_raw = get_val(0)   # A
+        sender_name_raw = get_val(1)   # B
+        pickup_name = mask_chinese_name(pickup_name_raw)
+        sender_name = mask_chinese_name(sender_name_raw)
         tickets = get_val(2)       # C
         number = get_val(3)        # D
         need_pay = get_val(4).upper() == "TRUE"  # E
