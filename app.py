@@ -67,16 +67,16 @@ def api_search():
         def get_val(idx):
             return row[idx].strip() if idx < len(row) else ""
         
-        pickup_name_raw = get_val(0)   # A
-        sender_name_raw = get_val(1)   # B
+        pickup_name_raw = get_val(1)   
+        sender_name_raw = get_val(5)   
         pickup_name = mask_chinese_name(pickup_name_raw)
         sender_name = mask_chinese_name(sender_name_raw)
-        tickets = get_val(2)       # C
-        number = get_val(3)        # D
-        need_pay = get_val(4).upper() == "TRUE"  # E
-        amount = get_val(5)        # F
-        picked_up_flag = get_val(6).upper() == "TRUE"  # G
-        counter = get_val(7)       # H
+        tickets = get_val(6)       
+        number = get_val(0)        
+        need_pay = get_val(4).upper() == "TRUE"  
+        amount = get_val(2)        
+        picked_up_flag = get_val(3).upper() == "TRUE"  
+        counter = get_val(7)       
 
         if pickup_name_raw != keyword:
             continue
