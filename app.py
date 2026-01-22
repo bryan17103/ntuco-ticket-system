@@ -66,17 +66,24 @@ def api_search():
     for row in rows:
         def get_val(idx):
             return row[idx].strip() if idx < len(row) else ""
+
         
         pickup_name_raw = get_val(1)   
         sender_name_raw = get_val(5)   
         pickup_name = mask_chinese_name(pickup_name_raw)
-        sender_name = mask_chinese_name(sender_name_raw)
         tickets = get_val(6)       
         number = get_val(0)        
         need_pay = get_val(4).upper() == "TRUE"  
         amount = get_val(2)        
         picked_up_flag = get_val(3).upper() == "TRUE"  
-        counter = get_val(7)       
+        counter = get_val(7)   
+
+        keywords = ["粉專購票", "貴賓票", "高手觀摩"]
+
+        if any(k in sender_name_raw for k in keywords):
+            sender_name = sender_name_raw
+        else:
+            sender_name = mask_chinese_name(sender_name_raw)
 
         if pickup_name_raw != keyword:
             continue
