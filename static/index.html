@@ -188,7 +188,7 @@ footer {
     </div>
 
     <div class="search-box">
-        <input id="searchInput" placeholder="請輸入您的姓名以查詢。"/>
+        <input id="searchInput" placeholder="請輸入您的中文全名以查詢。"/>
         <button onclick="search()">查詢</button>
     </div>
 
@@ -211,11 +211,11 @@ async function search() {
 
     try {
         if (!keyword) {
-            resultDiv.innerHTML = "<p>請輸入姓名</p>";
+            resultDiv.innerHTML = "<p>請輸入中文全名！</p>";
             return;
         }
 
-        resultDiv.innerHTML = "查詢中...";
+        resultDiv.innerHTML = "查詢中⋯⋯";
         timeDiv.innerHTML = "";
 
         const response = await fetch(`/api/search?q=${encodeURIComponent(keyword)}`);
@@ -256,7 +256,6 @@ async function search() {
 
             cards += `
             <div class="ticket-card">
-                <div class="ticket-row"><span class="label">櫃檯</span><span class="capsule">${item.counter}</span></div>
                 <div class="ticket-row"><span class="label">編號</span><span class="capsule">${item.number}</span></div>
                 <div class="ticket-row"><span class="label">取票人</span><span>${item.pickup_name}</span></div>
                 <div class="ticket-row"><span class="label">張數</span><span>${item.tickets}</span></div>
@@ -271,7 +270,6 @@ async function search() {
         <div class="desktop-only">
             <table>
                 <tr>
-                    <th>櫃檯</th>
                     <th>編號</th>
                     <th>取票人</th>
                     <th>張數</th>
