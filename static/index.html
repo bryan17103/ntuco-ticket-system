@@ -122,9 +122,9 @@ th {
 }
 
 #result {
-    margin-top: 24px; /* ⬅️ 拉開搜尋欄與結果 */
+    margin-top: 24px; 
 }
-    
+
 .desktop-only { display: block; }
 .mobile-only { display: none; }
 
@@ -138,6 +138,7 @@ th {
     color: #C1442E;
     font-weight: bold;
     text-align: center;
+    line-height: 1.6;
 }
 
 .updated-time {
@@ -145,7 +146,7 @@ th {
     font-size: 14px;
     text-align: center;
 }
-    
+
 .help-link {
     text-align: center;
     margin-top: 10px;
@@ -178,7 +179,7 @@ footer {
 <div class="container">
     <h1>台大薰風國樂團 2026 冬季公演</h1>
     <h2>「歲月·歲樂」團內購票取票查詢系統</h2>
-    
+
     <div class="help-link">
         <a href="https://drive.google.com/file/d/1i_rNMs4ZCvzj8KjmxtyH5LNkfmqrBt1q/view?usp=sharing"
            target="_blank"
@@ -229,8 +230,13 @@ async function search() {
         let tableRows = "";
         let cards = "";
 
+        // ⭐ 是否包含貴賓票（寄票人）
+        const hasVipTicket = data.results.some(
+            item => item.sender_name === "貴賓票"
+        );
+
         data.results.forEach(item => {
-            const statusClass = item.pickup_status.includes("尚未")
+            const statusClass = item.pickup_status.includes("尚未取票")
                 ? "status-unpicked"
                 : "status-picked";
 
@@ -244,7 +250,6 @@ async function search() {
 
             tableRows += `
             <tr>
-                <td><span class="capsule">${item.counter}</span></td>
                 <td><span class="capsule">${item.number}</span></td>
                 <td>${item.pickup_name}</td>
                 <td>${item.tickets}</td>
@@ -266,6 +271,15 @@ async function search() {
             `;
         });
 
+        const pickupNoteHtml = hasVipTicket
+            ? `<div class="pickup-note">
+                🎟️ 領取貴賓票者可跳過隊伍直接前往領票，<br>
+                前台人員將會給予您協助～ 祝您聆聽愉快！
+              </div>`
+            : `<div class="pickup-note">
+                請備好整數零錢，並告知前台您的編號，謝謝！
+              </div>`;
+
         resultDiv.innerHTML = `
         <div class="desktop-only">
             <table>
@@ -283,7 +297,7 @@ async function search() {
         <div class="mobile-only">
             ${cards}
         </div>
-        <div class="pickup-note">請備好整數零錢，並告知前台您的編號，謝謝！</div>
+        ${pickupNoteHtml}
         `;
 
         timeDiv.innerHTML = `資料更新時間：${data.updated_time}`;
