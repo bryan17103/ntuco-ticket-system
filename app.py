@@ -67,7 +67,6 @@ def api_search():
         def get_val(idx):
             return row[idx].strip() if idx < len(row) else ""
 
-        
         pickup_name_raw = get_val(1)   
         sender_name_raw = get_val(5)   
         pickup_name = mask_chinese_name(pickup_name_raw)
@@ -86,14 +85,6 @@ def api_search():
             sender_name = mask_chinese_name(sender_name_raw)
 
         pickup_name_raw = pickup_name_raw.strip()
-        
-        # 名字長度不足 2，直接跳過（理論上不會發生，但保險）
-        if len(pickup_name_raw) < 2:
-            continue
-        
-        # 使用者一定要輸入 2 個字
-        if len(keyword) != 2:
-            continue
         
         # 只比對「名字最後兩個字」
         if keyword != pickup_name_raw[-2:]:
