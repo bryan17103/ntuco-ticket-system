@@ -78,7 +78,7 @@ def api_search():
         picked_up_flag = get_val(3).upper() == "TRUE"  
         counter = get_val(7)   
 
-        keywords = ["粉專購票", "貴賓票", "高手觀摩"]
+        keywords = ["粉專購票", "貴賓票", "高手觀摩", "戴瑋老師", "陳廷宇老師"]
 
         if any(k in sender_name_raw for k in keywords):
             sender_name = sender_name_raw
