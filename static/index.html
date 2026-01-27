@@ -230,9 +230,10 @@ async function search() {
         let tableRows = "";
         let cards = "";
 
-        // ⭐ 是否包含貴賓票（寄票人）
+        const vipSenders = ["貴賓票", "高手觀摩"];
+        
         const hasVipTicket = data.results.some(
-            item => item.sender_name === "貴賓票"
+          item => vipSenders.includes(item.sender_name)
         );
 
         data.results.forEach(item => {
