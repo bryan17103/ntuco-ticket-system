@@ -85,13 +85,22 @@ def api_search():
             sender_name = mask_chinese_name(sender_name_raw)
             
         pickup_name_raw = pickup_name_raw.strip()
+        keyword = keyword.strip()
         
-        if len(pickup_name_raw) < 2:
+        if not pickup_name_raw or not keyword:
             continue
         
-        last_two = pickup_name_raw[-2:]
+        name_len = len(pickup_name_raw)
         
-        if keyword != pickup_name_raw and keyword != last_two:
+        if name_len >= 3:
+            if keyword != pickup_name_raw:
+                continue
+        
+        elif name_len == 2:
+            if not keyword.endswith(pickup_name_raw):
+                continue
+        
+        else:
             continue
 
         if picked_up_flag and need_pay:
